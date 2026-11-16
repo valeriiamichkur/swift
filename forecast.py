@@ -138,3 +138,99 @@ def predict_station_availability(
         "status": status,
         "target_time": target_time.isoformat(),
     }
+
+'''тестові дані'''
+
+if __name__ == "__main__":
+    ny = ZoneInfo("America/New_York")
+
+    current_time = datetime(
+        2026, 11, 16, 14, 0, tzinfo=ny
+    )
+    target_time = datetime(
+        2026, 11, 16, 15, 0, tzinfo=ny
+    )
+
+    test_cases = [
+        ("Empty station", 3, 20, -5, -2, "low"),
+        ("Exactly empty", 4, 20, -4, 0, "low"),
+        ("Balanced station", 10, 20, 2, 12, "medium"),
+        ("Exactly full", 18, 20, 2, 20, "high"),
+        ("Overflow station", 18, 20, 6, 24, "high"),
+        ("No change", 10, 20, 0, 10, "medium"),
+    ]
+
+    for (
+        name,
+        bikes,
+        capacity,
+        flow,
+        expected,
+        status,
+    ) in test_cases:
+        result = predict_station_availability(
+            num_bikes_available=bikes,
+            capacity=capacity,
+            current_time=current_time,
+            target_time=target_time,
+            hourly_flows={
+                ("weekday", 14): flow,
+            },
+        )
+
+        assert result["expected"] == expected, name
+        assert result["status"] == status, name
+        assert result["net_flow"] == flow, name
+        assert result["bounded_expected"] == max(
+            0, min(capacity, expected)
+        ), name
+
+        print(
+            f"{name}: "
+            f"expected={result['expected']}, "
+            f"status={result['status']} — PASS"
+        )
+
+    partial_hour = predict_station_availability(
+        num_bikes_available=10,
+        capacity=20,
+        current_time=datetime(
+            2026, 11, 16, 14, 30, tzinfo=ny
+        ),
+        target_time=datetime(
+            2026, 11, 16, 15, 30, tzinfo=ny
+        ),
+        hourly_flows={
+            ("weekday", 14): -4,
+            ("weekday", 15): 2,
+        },
+    )
+
+    assert partial_hour["net_flow"] == -1
+    assert partial_hour["expected"] == 9
+    assert partial_hour["status"] == "medium"
+
+    print("Partial hours: PASS")
+
+    # Friday 23:30 to Saturday 00:30.
+    overnight = predict_station_availability(
+        num_bikes_available=10,
+        capacity=20,
+        current_time=datetime(
+            2026, 11, 20, 23, 30, tzinfo=ny
+        ),
+        target_time=datetime(
+            2026, 11, 21, 0, 30, tzinfo=ny
+        ),
+        hourly_flows={
+            ("weekday", 23): -4,
+            ("weekend", 0): 2,
+        },
+    )
+
+    assert overnight["net_flow"] == -1
+    assert overnight["expected"] == 9
+    assert overnight["status"] == "medium"
+
+    print("Weekday to weekend: PASS")
+    print("\nAll forecast tests passed!")
