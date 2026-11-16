@@ -1,10 +1,23 @@
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from math import isfinite
 from numbers import Real
 from zoneinfo import ZoneInfo
 
 
 NEW_YORK = ZoneInfo("America/New_York")
+
+DAY_TYPES = ("weekday", "weekend")
+
+# Risk threshold, in bikes: a station is "low" when it is expected to have at most
+# this many bikes, and "high" when it is expected to have at most this many free docks.
+# 0 means strictly empty / strictly full. The UI slider uses the default and range below.
+DEFAULT_THRESHOLD = 2
+THRESHOLD_RANGE = (0, 10)
+
+
+def day_type(moment: date) -> str:
+    """'weekday' for Monday-Friday, 'weekend' for Saturday and Sunday."""
+    return "weekday" if moment.weekday() < 5 else "weekend"
 
 
 def _number(value, field):
@@ -49,12 +62,7 @@ def _calculate_flow(
     while cursor < end:
         local_time = cursor.astimezone(NEW_YORK)
 
-        if local_time.weekday() < 5:
-            day_type = "weekday"
-        else:
-            day_type = "weekend"
-
-        key = (day_type, local_time.hour)
+        key = (day_type(local_time), local_time.hour)
 
         hourly_flow = _number(
             hourly_flows[key],
@@ -88,6 +96,7 @@ def predict_station_availability(
     current_time,
     target_time,
     hourly_flows,
+    threshold=0,
 ):
     bikes = _number(
         num_bikes_available,
@@ -100,11 +109,17 @@ def predict_station_availability(
             "Capacity must be greater than zero"
         )
 
-    if not 0 <= bikes <= capacity:
+    # More bikes than capacity is real (e.g. valet service at busy
+    # stations), so only a negative count is rejected.
+    if bikes < 0:
         raise ValueError(
-            "The current number of bikes must be "
-            "between zero and capacity"
+            "The current number of bikes cannot be negative"
         )
+
+    threshold = _number(threshold, "threshold")
+
+    if threshold < 0:
+        raise ValueError("Threshold cannot be negative")
 
     net_flow = _calculate_flow(
         current_time,
@@ -120,9 +135,9 @@ def predict_station_availability(
             "numeric range"
         )
 
-    if expected <= 0:
+    if expected <= threshold:
         status = "low"
-    elif expected >= capacity:
+    elif expected >= capacity - threshold:
         status = "high"
     else:
         status = "medium"
@@ -232,4 +247,36 @@ if __name__ == "__main__":
     assert overnight["status"] == "medium"
 
     print("Weekday to weekend: PASS")
+
+    threshold_cases = [
+        ("Near empty", 3, 20, -1, 2, "low"),
+        ("Near full", 17, 20, 1, 2, "high"),
+        ("Comfortable", 10, 20, 0, 2, "medium"),
+    ]
+
+    for name, bikes, capacity, flow, threshold, status in threshold_cases:
+        result = predict_station_availability(
+            num_bikes_available=bikes,
+            capacity=capacity,
+            current_time=current_time,
+            target_time=target_time,
+            hourly_flows={("weekday", 14): flow},
+            threshold=threshold,
+        )
+        assert result["status"] == status, name
+
+    print("Threshold: PASS")
+
+    overfull = predict_station_availability(
+        num_bikes_available=25,
+        capacity=20,
+        current_time=current_time,
+        target_time=target_time,
+        hourly_flows={("weekday", 14): 0},
+    )
+
+    assert overfull["status"] == "high"
+    assert overfull["bounded_expected"] == 20
+
+    print("More bikes than capacity: PASS")
     print("\nAll forecast tests passed!")

@@ -99,3 +99,13 @@ def build_risk_tables(stations, limit=10):
     ).rename(columns=TABLE_COLUMNS)
 
     return low_table, high_table
+
+
+def map_points(stations):
+    """One row per station with lat, lon and status; styling is in station_map.py."""
+    frame = pd.DataFrame(
+        list(stations),
+        columns=["lat", "lon", "status"],
+    )
+
+    return frame.dropna(subset=["lat", "lon"])
