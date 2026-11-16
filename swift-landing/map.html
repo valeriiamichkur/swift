@@ -8,15 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400&family=Inter:wght@400&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/station-map.css">
   <link rel="stylesheet" href="css/map.css">
 </head>
 <body class="map-page">
 
-  <!-- image 2 — station map -->
+  <!-- image 2 — station map, now a live Leaflet map (js/station-map.js) -->
   <div class="map-stage">
-    <img class="map-stage__img" src="assets/img/map.png" alt="Map with forecast markers for nearby stations">
+    <div class="station-map" id="station-map" aria-label="Map of New York Citi Bike stations with forecast markers"></div>
   </div>
 
   <!-- Rectangle 4 — controls panel -->
@@ -30,8 +32,20 @@
 
     <!-- image 3 — clock, rebuilt as an interactive SVG (js/clock.js) -->
     <div class="clock" id="forecast-clock"></div>
+
+    <!-- forecast summary for the chosen time -->
+    <section class="summary" aria-live="polite">
+      <p class="summary__window">Forecast for <strong id="summary-window">—</strong></p>
+      <ul class="summary__counts">
+        <li><i class="summary__dot summary__dot--low"></i><b id="summary-low">–</b> likely to empty</li>
+        <li><i class="summary__dot summary__dot--high"></i><b id="summary-high">–</b> likely to overflow</li>
+      </ul>
+      <p class="summary__note" id="summary-note">Loading live station data…</p>
+    </section>
   </aside>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="js/station-map.js"></script>
   <script src="js/clock.js"></script>
   <script src="js/map.js"></script>
 </body>

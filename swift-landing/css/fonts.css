@@ -1,24 +1,24 @@
 /*
   Fonts used in the Figma file
   ----------------------------------------------------------------
-  NAMU 1960   – headings                (not on a public CDN)
-  NAMU Pro    – body text, ribbons      (not on a public CDN)
-  Buvera Bold – SWIFT logo              (not on a public CDN)
+  NAMU 1960   – headings                (bundled: assets/fonts)
+  NAMU Pro    – body text, ribbons      (bundled: assets/fonts)
+  Buvera Bold – SWIFT logo              (bundled: assets/fonts)
   Clash Display Bold – "in an hour"     (bundled: assets/fonts)
   DM Sans Medium – menu & buttons       (Google Fonts, see <head>)
   FontAwesome 4.7 – icons               (cdnjs, see <head>)
 
-  The browser first tries a locally installed copy (local()), then a file
-  in assets/fonts/. Drop the original NAMU / Buvera files there under the
-  names below to get the exact typography. Until then the visually
-  closest fallbacks from the font stacks in styles.css are used.
+  Only the bundled files are used, no local(): a copy installed on the
+  developer's Mac would otherwise hide missing files (it looks right
+  there and falls back to Inter everywhere else), and Safari ignores
+  user-installed fonts in local() anyway.
 */
 
 @font-face {
   font-family: "NAMU 1960";
-  src: local("NAMU 1960"), local("NAMU-1960"),
-       url("../assets/fonts/NAMU-1960.woff2") format("woff2"),
-       url("../assets/fonts/NAMU-1960.otf") format("opentype");
+  src: url("../assets/fonts/NAMU-1960.woff2") format("woff2"),
+       url("../assets/fonts/NAMU-1960.woff") format("woff"),
+       url("../assets/fonts/NAMU-1960.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -26,8 +26,8 @@
 
 @font-face {
   font-family: "NAMU Pro";
-  src: local("NAMU Pro"), local("NAMU-Pro"),
-       url("../assets/fonts/NAMU-Pro.woff2") format("woff2"),
+  src: url("../assets/fonts/NAMU-Pro.woff2") format("woff2"),
+       url("../assets/fonts/NAMU-Pro.woff") format("woff"),
        url("../assets/fonts/NAMU-Pro.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
@@ -36,9 +36,7 @@
 
 @font-face {
   font-family: "Buvera";
-  src: local("Buvera Bold"), local("Buvera-Bold"),
-       url("../assets/fonts/Buvera-Bold.woff2") format("woff2"),
-       url("../assets/fonts/Buvera-Bold.otf") format("opentype");
+  src: url("../assets/fonts/Buvera-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -46,8 +44,7 @@
 
 @font-face {
   font-family: "Clash Display";
-  src: local("Clash Display Bold"), local("ClashDisplay-Bold"),
-       url("../assets/fonts/ClashDisplay-Bold.ttf") format("truetype");
+  src: url("../assets/fonts/ClashDisplay-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

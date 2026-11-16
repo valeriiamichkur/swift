@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter+Tight:wght@400;500&family=Inter:wght@400&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/station-map.css">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -134,9 +136,9 @@
             <img class="btn__arrow" src="assets/icons/arrow-right.svg" width="25.2019" height="14.5" alt="" aria-hidden="true">
           </a>
         </div>
-        <a class="live__map reveal" href="map.html" aria-label="Open full-screen map">
-          <img src="assets/img/map.png" alt="Map with station forecast markers">
-        </a>
+        <div class="live__map reveal">
+          <div class="station-map" id="live-map" aria-label="Live map of Citi Bike stations likely to empty or overflow in the next hour"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -157,6 +159,19 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="js/station-map.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Live preview: forecast for the next hour from now (server defaults), refreshed every minute.
+    (function () {
+      if (!window.L || !window.SwiftStationMap) return;
+      const preview = new SwiftStationMap(document.getElementById('live-map'), { interactive: true, zoom: 12 });
+      preview.map.scrollWheelZoom.disable();
+      const refresh = () => preview.load().catch(() => {});
+      refresh();
+      setInterval(() => { if (!document.hidden) refresh(); }, 60000);
+    })();
+  </script>
 </body>
 </html>
