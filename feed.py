@@ -59,9 +59,9 @@ def load_live_data():
             ])
 
 
-def get_available_docks(station_id: str, df: pd.DataFrame = None):
+def get_available_bikes(station_id: str, df: pd.DataFrame = None):
     """
-    Повертає актуальну кількість вільних місць (доків) для конкретної станції за її station_id.
+    Повертає актуальну кількість велосипедів на станції (зайнятих слотів) за її station_id.
     Якщо таблицю df не передано, автоматично підтягує свіжі (або кешовані) дані.
     Повертає int або None, якщо станцію не знайдено.
     """
@@ -73,4 +73,4 @@ def get_available_docks(station_id: str, df: pd.DataFrame = None):
     if match.empty:
         return None
         
-    return int(match.iloc[0]['num_docks_available'])
+    return int(match.iloc[0]['num_bikes_available'])
