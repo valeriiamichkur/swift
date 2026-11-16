@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SWIFT — Citi Bike station forecast</title>
+  <meta name="description" content="SWIFT combines a week of trip history with live station data to show which Citi Bike stations will soon run out of bikes or free docks.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Inter+Tight:wght@400;500&family=Inter:wght@400&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+    <img class="hero__bg" src="assets/img/hero.png" alt="Rider on a Citi Bike docked at a station">
+
+    <nav class="nav container">
+      <a class="logo" href="#top">SWIFT</a>
+      <ul class="menu">
+        <li><a class="menu__link" href="#how-it-works">How it works</a></li>
+        <li><a class="menu__link" href="#data">Data</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero__content container">
+      <h1 class="hero__title">
+        <span class="hero__title-main">What your Citi Bike station will look like </span>
+        <span class="hero__title-accent">in an hour</span>
+      </h1>
+      <p class="hero__lead">SWIFT combines a week of trip history with live station data that will soon run out of bikes or free docks.</p>
+      <a class="btn btn--hero" href="map.html">Open the map</a>
+    </div>
+  </header>
+
+  <!-- ============ RIBBONS ============ -->
+  <div class="ribbons" aria-hidden="true">
+    <div class="ribbon ribbon--dark">
+      <div class="ribbon__track" data-marquee="left">
+        <span>Built on open data from Citi Bike, New York</span>
+        <span>Built on open data from Citi Bike, New York</span>
+        <span>Built on open data from Citi Bike, New York</span>
+      </div>
+    </div>
+    <div class="ribbon ribbon--blue">
+      <div class="ribbon__track" data-marquee="right">
+        <span>Built on open data from Citi Bike, New York</span>
+        <span>Built on open data from Citi Bike, New York</span>
+        <span>Built on open data from Citi Bike, New York</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="how" id="how-it-works">
+      <div class="how__inner container">
+        <div class="how__text">
+          <h2 class="h2 how__title reveal">How SWIFT Predicts Station Imbalance</h2>
+
+          <ol class="steps">
+            <li class="step step--1 reveal">
+              <span class="step__num">01</span>
+              <h3 class="step__title">Historical Flow Baseline</h3>
+              <p class="step__desc">We calculate typical hourly net flow for every station across weekdays and weekends.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step__num">02</span>
+              <h3 class="step__title">Live GBFS Feed Sync</h3>
+              <p class="step__desc">SWIFT pulls real-time bike and dock counts directly from Citi Bike’s live GBFS stream.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step__num">03</span>
+              <h3 class="step__title">1-Hour Risk Scoring</h3>
+              <p class="step__desc">We apply expected hourly flow to live station counts to flag docks likely to empty or overfill within 60 minutes.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div class="phone reveal">
+          <div class="phone__screen">
+            <img src="assets/img/phone-screen.png" alt="Citi Bike dock screen in front of the Manhattan Bridge">
+          </div>
+          <img class="phone__frame" src="assets/img/iphone-frame.png" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OPEN DATA ============ -->
+    <section class="data" id="data">
+      <div class="container">
+        <h2 class="h2 data__title reveal">Open Data Pipeline</h2>
+        <p class="data__lead reveal">Transparent, reproducible inputs powered by Citi Bike’s public data feeds.</p>
+
+        <div class="cards">
+          <article class="card card--system reveal">
+            <img class="card__img" src="assets/img/data-system.png" alt="Citi Bike docked at a station">
+            <div class="card__body">
+              <i class="fa fa-cloud card__icon" aria-hidden="true"></i>
+              <div>
+                <h3 class="card__title">Citi Bike System Data</h3>
+                <p class="card__desc">What we use: Departure &amp; arrival timestamps, start &amp; end station names</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--gbfs reveal">
+            <img class="card__img" src="assets/img/data-gbfs.png" alt="Row of docked Citi Bikes">
+            <div class="card__body">
+              <i class="fa fa-book card__icon" aria-hidden="true"></i>
+              <div>
+                <h3 class="card__title">Citi Bike Live GBFS Feed</h3>
+                <p class="card__desc">Station coordinates, total dock capacity, real-time bike &amp; dock counts</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIVE MAP ============ -->
+    <section class="live" id="map">
+      <div class="live__inner container">
+        <div class="live__text">
+          <h2 class="h2 live__title reveal">Live Station Map</h2>
+          <p class="live__lead reveal">See which Citi Bike stations are about to run empty or overfill in the next 60 minutes.</p>
+          <a class="btn btn--arrow reveal" href="map.html">
+            <span>Open Full-Screen Map</span>
+            <img class="btn__arrow" src="assets/icons/arrow-right.svg" width="25.2019" height="14.5" alt="" aria-hidden="true">
+          </a>
+        </div>
+        <a class="live__map reveal" href="map.html" aria-label="Open full-screen map">
+          <img src="assets/img/map.png" alt="Map with station forecast markers">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__inner container">
+      <a class="logo" href="#top">SWIFT</a>
+      <ul class="menu">
+        <li><a class="menu__link" href="#how-it-works">How it works</a></li>
+        <li><a class="menu__link" href="#data">Data</a></li>
+      </ul>
+      <ul class="socials">
+        <li><a class="social" href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a class="social" href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+        <li><a class="social" href="#" aria-label="Google"><i class="fa fa-google" aria-hidden="true"></i></a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

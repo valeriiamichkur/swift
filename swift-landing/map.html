@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SWIFT — Forecast map</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400&family=Inter:wght@400&display=swap">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/map.css">
+</head>
+<body class="map-page">
+
+  <!-- image 2 — station map -->
+  <div class="map-stage">
+    <img class="map-stage__img" src="assets/img/map.png" alt="Map with forecast markers for nearby stations">
+  </div>
+
+  <!-- Rectangle 4 — controls panel -->
+  <aside class="controls" aria-labelledby="controls-title">
+    <h1 class="controls__title" id="controls-title">Forecast Controls</h1>
+
+    <div class="segments" role="tablist" aria-label="Day type">
+      <button class="pill segment is-active" role="tab" aria-selected="true"  data-mode="weekday">Weekday</button>
+      <button class="pill segment"           role="tab" aria-selected="false" data-mode="weekend">Weekend</button>
+    </div>
+
+    <!-- image 3 — clock, rebuilt as an interactive SVG (js/clock.js) -->
+    <div class="clock" id="forecast-clock"></div>
+  </aside>
+
+  <script src="js/clock.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>

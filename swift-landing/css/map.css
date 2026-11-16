@@ -1,0 +1,124 @@
+/* =========================================================
+   Full-screen map — Figma frames "maps" (135:145 weekday,
+   135:171 weekend), 1420 × 960
+   ========================================================= */
+.map-page {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* image 2: 1872 × 1022 placed at (-378, -62) */
+.map-stage {
+  position: fixed;
+  inset: 0 579px 0 0;
+  overflow: hidden;
+  background: #1f1f1f;
+}
+.map-stage__img {
+  position: absolute;
+  left: -378px;
+  top: -62px;
+  height: calc(max(960px, 100vh) + 62px);
+  width: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Rectangle 4 — x 841, w 579 */
+.controls {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 579px;
+  padding: 88px 0 40px 41px;
+  background: var(--paper);
+  overflow-y: auto;
+}
+.controls__title {
+  width: 412px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: -4px;
+  color: var(--ink);
+}
+
+/* ---------- Pills ---------- */
+.pill {
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 32px;
+  background: var(--grey);
+  color: var(--off-white);
+  font-family: var(--font-text);
+  font-size: 22px;
+  line-height: 26px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .3s var(--ease), color .3s var(--ease), width .35s var(--ease), transform .2s var(--ease);
+}
+.pill:hover { background: #c9c9c9; }
+.pill:active { transform: scale(.96); }
+.pill.is-active { background: var(--white); color: var(--blue); cursor: default; }
+.pill.is-active:active { transform: none; }
+
+/* Weekday / Weekend — active one sits first and is wider (196 vs 153) */
+.segments {
+  display: flex;
+  gap: 16px;
+  margin-top: 37px;          /* y 183 */
+}
+.segment          { width: 153px; order: 2; }
+.segment.is-active { width: 196px; order: 1; }
+
+/* image 3 — clock (558 × 558, x = panel + 10).
+   The day chips were removed, so the clock sits 24px under the
+   Weekday/Weekend switch (the same gap it had under the chips). */
+.clock {
+  position: relative;
+  width: 558px;
+  height: 558px;
+  margin: 24px 0 0 -31px;
+  border-radius: 32px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.clock svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.clock__dial { cursor: grab; touch-action: none; outline: none; }
+.clock.is-dragging .clock__dial { cursor: grabbing; }
+.clock__dial:focus-visible .clock__face { stroke: var(--blue); stroke-width: 4; }
+
+.clock__num  { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; pointer-events: none; }
+.clock__time { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; font-variant-numeric: tabular-nums; pointer-events: none; }
+
+.clock__hand {
+  transform-box: view-box;
+  transform-origin: 512px 512px;
+  transition: transform .35s var(--ease);
+}
+.clock.is-dragging .clock__hand { transition: none; }
+
+.clock__period { cursor: pointer; outline: none; }
+.clock__period-thumb { transition: transform .3s var(--ease); }
+.clock__period text { pointer-events: none; transition: fill .3s var(--ease); }
+.clock__period:hover .clock__period-bg { fill: #3b444b; }
+.clock__period:focus-visible .clock__period-bg { stroke: var(--blue); stroke-width: 4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .clock__hand, .clock__period-thumb { transition: none; }
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 1000px) {
+  .map-page { overflow: auto; }
+  .map-stage { position: relative; inset: auto; height: 60vh; min-height: 360px; }
+  .map-stage__img { left: 50%; top: 50%; transform: translate(-42%, -55%); height: 1022px; }
+  .controls { position: relative; width: auto; padding: 48px 20px 48px; }
+  .controls__title { width: auto; font-size: 40px; letter-spacing: -3px; }
+  .clock { width: 100%; max-width: 558px; height: auto; aspect-ratio: 1; margin: 24px auto 0; }
+}
