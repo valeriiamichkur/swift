@@ -212,7 +212,6 @@ if __name__ == "__main__":
 
     print("Partial hours: PASS")
 
-    # Friday 23:30 to Saturday 00:30.
     overnight = predict_station_availability(
         num_bikes_available=10,
         capacity=20,
