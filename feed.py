@@ -9,11 +9,7 @@ GBFS_DISCOVERY_URL = "https://gbfs.citibikenyc.com/gbfs/gbfs.json"
 
 @st.cache_data(ttl=60)
 def load_live_data():
-    """
-    Завантажує живі дані Citi Bike через GBFS API,
-    об'єднує station_information та station_status за station_id.
-    Має fallback на локальний файл, якщо API недоступне.
-    """
+    #об'єднує station_information та station_status за station_id.
     try:
         discovery_res = requests.get(GBFS_DISCOVERY_URL, timeout=10)
         discovery_res.raise_for_status()
